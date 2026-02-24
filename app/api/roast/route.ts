@@ -1,6 +1,7 @@
 import puppeteer from "puppeteer";
 import puppeteerCore from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
+import type { Browser } from "puppeteer-core";
 import { NextResponse } from "next/server";
 import { analyzePortfolio } from "../../lib/analyzeAI";
 import { generateAudio } from "@/app/lib/generateAudio";
@@ -10,12 +11,9 @@ export async function POST(req: Request) {
     const { url, mode } = await req.json();
     const selectedMode = mode || "brutal";
 
-    let browser;
+    let browser: Browser;
 
-    // Detect Vercel environment
     if (process.env.VERCEL === "1") {
-
-      chromium.setGraphicsMode = false;
 
       browser = await puppeteerCore.launch({
         args: [
@@ -33,7 +31,7 @@ export async function POST(req: Request) {
 
       browser = await puppeteer.launch({
         headless: true,
-      });
+      }) as unknown as Browser;
 
     }
 
@@ -67,9 +65,7 @@ export async function POST(req: Request) {
 
     const aiResult = await analyzePortfolio(data, selectedMode);
 
-    const audioBase64 = await generateAudio(
-      aiResult.first_impression
-    );
+    const audioBase64 = await generateAudio(aiResult.first_impression);
 
     return NextResponse.json({
       success: true,
