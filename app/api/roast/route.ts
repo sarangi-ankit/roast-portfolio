@@ -1,4 +1,6 @@
 import puppeteer from "puppeteer";
+import puppeteerCore from "puppeteer-core";
+import chromium from "@sparticuz/chromium";
 import { NextResponse } from "next/server";
 import { analyzePortfolio } from "../../lib/analyzeAI";
 import { generateAudio } from "@/app/lib/generateAudio";
@@ -6,28 +8,44 @@ import { generateAudio } from "@/app/lib/generateAudio";
 export async function POST(req: Request) {
   try {
     const { url, mode } = await req.json();
-
     const selectedMode = mode || "brutal";
 
-    const browser = await puppeteer.launch({
-      headless: "new",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
+    let browser;
+
+    // Detect Vercel environment
+    if (process.env.VERCEL) {
+      browser = await puppeteerCore.launch({
+        args: chromium.args,
+        executablePath: await chromium.executablePath(),
+        headless: true,
+      });
+    } else {
+      // Local machine
+      browser = await puppeteer.launch({
+        headless: "new",
+      });
+    }
 
     const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "networkidle2" });
+
+    await page.goto(url, {
+      waitUntil: "domcontentloaded",
+    });
 
     const data = await page.evaluate(() => ({
       title: document.title,
       heroHeading: document.querySelector("h1")?.textContent || "",
+
       headings: Array.from(document.querySelectorAll("h2, h3"))
         .map(h => h.textContent)
         .filter(Boolean)
         .slice(0, 10),
+
       paragraphs: Array.from(document.querySelectorAll("p"))
         .map(p => p.textContent)
         .filter(Boolean)
         .slice(0, 10),
+
       buttons: Array.from(document.querySelectorAll("button, a"))
         .map(btn => btn.textContent)
         .filter(Boolean)
@@ -37,8 +55,10 @@ export async function POST(req: Request) {
     await browser.close();
 
     const aiResult = await analyzePortfolio(data, selectedMode);
-    
-    const audioBase64 = await generateAudio(aiResult.first_impression);
+
+    const audioBase64 = await generateAudio(
+      aiResult.first_impression
+    );
 
     return NextResponse.json({
       success: true,
@@ -55,5 +75,3 @@ export async function POST(req: Request) {
     );
   }
 }
-
-
