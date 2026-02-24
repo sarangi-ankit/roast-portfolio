@@ -13,17 +13,28 @@ export async function POST(req: Request) {
     let browser;
 
     // Detect Vercel environment
-    if (process.env.VERCEL) {
+    if (process.env.VERCEL === "1") {
+
+      chromium.setGraphicsMode = false;
+
       browser = await puppeteerCore.launch({
-        args: chromium.args,
+        args: [
+          ...chromium.args,
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+          "--disable-dev-shm-usage",
+          "--single-process",
+        ],
         executablePath: await chromium.executablePath(),
-        headless: true,
+        headless: chromium.headless,
       });
+
     } else {
-     
+
       browser = await puppeteer.launch({
         headless: true,
       });
+
     }
 
     const page = await browser.newPage();
