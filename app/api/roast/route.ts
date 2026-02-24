@@ -20,7 +20,7 @@ export async function POST(req: Request) {
         headless: true,
       });
     } else {
-      // Local machine
+     
       browser = await puppeteer.launch({
         headless: true,
       });
