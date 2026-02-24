@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     } else {
       // Local machine
       browser = await puppeteer.launch({
-        headless: "new",
+        headless: true,
       });
     }
 
