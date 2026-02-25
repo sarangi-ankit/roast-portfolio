@@ -1,18 +1,18 @@
-import puppeteer from "puppeteer-core";
+
 // import puppeteer from "puppeteer";
-import chromium from "@sparticuz/chromium";
+
 import { NextResponse } from "next/server";
 import { analyzePortfolio } from "../../lib/analyzeAI";
 import { generateAudio } from "@/app/lib/generateAudio";
 import { getBrowser } from "@/app/lib/puppeteer";
 
-type PortfolioData = {
-  title: string;
-  heroHeading: string;
-  headings: string[];
-  paragraphs: string[];
-  buttons: string[];
-};
+// type PortfolioData = {
+//   title: string;
+//   heroHeading: string;
+//   headings: string[];
+//   paragraphs: string[];
+//   buttons: string[];
+// };
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
