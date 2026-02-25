@@ -4,6 +4,7 @@ import chromium from "@sparticuz/chromium";
 import { NextResponse } from "next/server";
 import { analyzePortfolio } from "../../lib/analyzeAI";
 import { generateAudio } from "@/app/lib/generateAudio";
+import { getBrowser } from "@/app/lib/puppeteer";
 
 type PortfolioData = {
   title: string;
@@ -22,12 +23,7 @@ export async function POST(req: Request) {
     const selectedMode = mode || "brutal";
 
     // PRODUCTION (VERCEL)
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
-      headless: chromium.headless,
-    });
+    const browser = await getBrowser();
 
     
     // LOCAL DEVELOPMENT (COMMENTED)
@@ -42,7 +38,7 @@ export async function POST(req: Request) {
       waitUntil: "domcontentloaded",
     });
 
-    const data: PortfolioData = await page.evaluate(() => ({
+    const data = await page.evaluate(() => ({
       title: document.title,
 
       heroHeading:
