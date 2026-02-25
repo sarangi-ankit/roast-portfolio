@@ -1,4 +1,5 @@
-import puppeteer from "puppeteer-core";
+// import puppeteer from "puppeteer-core";
+import puppeteer from "puppeteer";
 import chromium from "@sparticuz/chromium";
 import { NextResponse } from "next/server";
 import { analyzePortfolio } from "../../lib/analyzeAI";
@@ -19,23 +20,17 @@ export async function POST(req: Request) {
 
     // PRODUCTION (VERCEL)
     const browser = await puppeteer.launch({
-      args: [
-        ...chromium.args,
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--single-process",
-      ],
+      args: chromium.args,
       executablePath: await chromium.executablePath(),
-      headless: chromium.headless,
-    });
-
-    /*
-    // LOCAL DEVELOPMENT (COMMENTED)
-    const browser = await puppeteer.launch({
       headless: true,
     });
-    */
+
+    
+    // LOCAL DEVELOPMENT (COMMENTED)
+    // const browser = await puppeteer.launch({
+    //   headless: true,
+    // });
+    
 
     const page = await browser.newPage();
 
