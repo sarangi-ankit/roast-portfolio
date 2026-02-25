@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { analyzePortfolio } from "../../lib/analyzeAI";
 import { generateAudio } from "@/app/lib/generateAudio";
 import { getBrowser } from "@/app/lib/puppeteer";
-import puppeteer from "puppeteer";
+// import puppeteer from "puppeteer";
 
 
 export const runtime = "nodejs";
@@ -15,13 +15,13 @@ export async function POST(req: Request) {
     const selectedMode = mode || "brutal";
 
     // PRODUCTION (VERCEL)
-    // const browser = await getBrowser();
+    const browser = await getBrowser();
 
     
     // LOCAL DEVELOPMENT (COMMENTED)
-    const browser = await puppeteer.launch({
-      headless: true,
-    });
+    // const browser = await puppeteer.launch({
+    //   headless: true,
+    // });
     
 
     const page = await browser.newPage();
