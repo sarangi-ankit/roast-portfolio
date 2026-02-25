@@ -1,5 +1,5 @@
-// import puppeteer from "puppeteer-core";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+// import puppeteer from "puppeteer";
 import chromium from "@sparticuz/chromium";
 import { NextResponse } from "next/server";
 import { analyzePortfolio } from "../../lib/analyzeAI";
