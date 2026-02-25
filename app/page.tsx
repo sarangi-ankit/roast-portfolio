@@ -29,15 +29,15 @@ const App = () => {
       })
 
       const data = await res.json()
-      console.log("data", data)
+      
 
-      // if (!data.success) {
+      if (!data.success) {
 
-      //   setError(data.error || "Something went wrong")
-      //   setResult(null)
-      //   setLoading(false)
-      //   return
-      // }
+        setError(data.error || "Something went wrong")
+        setResult(null)
+        setLoading(false)
+        return
+      }
       setAudio(data.audio) 
       setResult(data.roast)
 
@@ -50,7 +50,7 @@ const App = () => {
     setLoading(false)
 
   }
-  console.log("result", result)
+
   return (
 
     <div className="min-h-screen bg-black text-white">

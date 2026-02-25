@@ -20,7 +20,7 @@ const Header = ({ onSubmit, loading, hasResult, error,url,setUrl }: HeaderProps)
 
     const normalizeUrl = (value: string) => {
         if (!value.startsWith("http")) {
-            return `https://${value}`
+            return `${value}`
         }
         return value
     }
@@ -73,67 +73,57 @@ const Header = ({ onSubmit, loading, hasResult, error,url,setUrl }: HeaderProps)
                 </h1>
 
 
-                <div className="flex justify-center gap-4 flex-col sm:flex-row">
+                <div className="flex justify-center w-full">
+                    <div className="relative w-full max-w-2xl">
 
-                    <Input
-                        value={url}
-                        onChange={setUrl}
-                        placeholder="Enter Your Portfolio URL ..."
-
-
-                        error={inputError || error}
-                    />
-
-                    <Button
-                        onClick={handleSubmit}
-                        loading={loading}
-                    />
-
+                        <Input
+                            value={url}
+                            onChange={setUrl}
+                            placeholder="Enter your portfolio URL..."
+                            error={inputError || error}
+                            rightElement={
+                                <Button
+                                    onClick={handleSubmit}
+                                    loading={loading}
+                                    variant="warning"
+                                    size="sm"
+                                    className="h-[42px] px-5"
+                                >
+                                    🔥 Roast Me
+                                </Button>
+                            }
+                        />
+                    </div>
                 </div>
                 {/* Mode Selector */}
 
                 <div className="flex justify-center gap-3 mt-3">
 
-                    <button
+                    <Button
                         onClick={() => setMode("brutal")}
-                        className={`
-                        px-4 py-2 rounded-lg text-sm font-semibold transition
-
-                        ${mode === "brutal"
-                                ? "bg-red-500 text-white shadow-lg shadow-red-500/30"
-                                : "bg-zinc-800 text-gray-300 hover:bg-zinc-700"}
-                    `}
+                        variant={mode === "brutal" ? "brutal" : "ghost"}
+                        size="sm"
                     >
                         🔥 Brutal
-                    </button>
+                    </Button>
 
 
-                    <button
+                    <Button
                         onClick={() => setMode("polite")}
-                        className={`
-                            px-4 py-2 rounded-lg text-sm font-semibold transition
-
-                            ${mode === "polite"
-                                ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30"
-                                : "bg-zinc-800 text-gray-300 hover:bg-zinc-700"}
-                        `}
+                        variant={mode === "polite" ? "polite" : "ghost"}
+                        size="sm"
                     >
                         🙂 Polite
-                    </button>
+                    </Button>
 
 
-                    <button
+                    <Button
                         onClick={() => setMode("expert")}
-                        className={`
-                        px-4 py-2 rounded-lg text-sm font-semibold transition
-
-                        ${mode === "expert"
-                                ? "bg-green-500 text-white shadow-lg shadow-green-500/30"
-                                : "bg-zinc-800 text-gray-300 hover:bg-zinc-700"}
-                        `}
+                        variant={mode === "expert" ? "expert" : "ghost"}
+                        size="sm"
                     >
                         🧠 Expert
-                    </button>
+                    </Button>
 
                 </div>
             </div>
