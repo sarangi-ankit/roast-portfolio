@@ -13,6 +13,9 @@ type PortfolioData = {
   buttons: string[];
 };
 
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
 export async function POST(req: Request) {
   try {
     const { url, mode } = await req.json();
@@ -21,8 +24,9 @@ export async function POST(req: Request) {
     // PRODUCTION (VERCEL)
     const browser = await puppeteer.launch({
       args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath(),
-      headless: true,
+      headless: chromium.headless,
     });
 
     
